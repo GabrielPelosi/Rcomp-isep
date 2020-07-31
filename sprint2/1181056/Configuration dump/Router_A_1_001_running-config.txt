@@ -1,0 +1,119 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.1
+ encapsulation dot1Q 461
+ ip address 10.167.200.1 255.255.255.192
+!
+interface FastEthernet0/0.2
+ encapsulation dot1Q 462
+ ip address 10.167.200.65 255.255.255.192
+!
+interface FastEthernet0/0.3
+ encapsulation dot1Q 463
+ ip address 10.167.201.225 255.255.255.224
+!
+interface FastEthernet0/0.4
+ encapsulation dot1Q 464
+ ip address 10.167.197.129 255.255.255.128
+!
+interface FastEthernet0/0.5
+ encapsulation dot1Q 465
+ ip address 10.167.202.1 255.255.255.224
+!
+interface FastEthernet0/0.6
+ encapsulation dot1Q 486
+ ip address 10.167.196.1 255.255.255.128
+!
+interface FastEthernet0/1
+ ip address 17.10.7.134 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router rip
+!
+ip classless
+ip route 10.167.198.0 255.255.255.192 10.167.196.2 
+ip route 0.0.0.0 0.0.0.0 17.10.7.133 
+ip route 10.167.197.0 255.255.255.128 10.167.196.2 
+ip route 10.167.196.128 255.255.255.128 10.167.196.2 
+ip route 10.167.202.32 255.255.255.240 10.167.196.2 
+ip route 10.167.201.128 255.255.255.192 10.167.196.2 
+ip route 10.167.200.128 255.255.255.192 10.167.196.3 
+ip route 10.167.199.128 255.255.255.192 10.167.196.3 
+ip route 10.167.198.64 255.255.255.192 10.167.196.3 
+ip route 10.167.193.0 255.255.255.0 10.167.196.3 
+ip route 10.167.199.192 255.255.255.192 10.167.196.3 
+ip route 10.167.200.192 255.255.255.192 10.167.196.5 
+ip route 10.167.199.0 255.255.255.192 10.167.196.5 
+ip route 10.167.198.128 255.255.255.192 10.167.196.5 
+ip route 10.167.194.0 255.255.255.0 10.167.196.5 
+ip route 10.167.201.192 255.255.255.224 10.167.196.5 
+ip route 10.167.201.0 255.255.255.192 10.167.196.4 
+ip route 10.167.199.64 255.255.255.192 10.167.196.4 
+ip route 10.167.198.192 255.255.255.192 10.167.196.4 
+ip route 10.167.195.0 255.255.255.0 10.167.196.4 
+ip route 10.167.201.64 255.255.255.192 10.167.196.4 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+

@@ -1,0 +1,173 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+ip dhcp excluded-address 10.167.198.1
+ip dhcp excluded-address 10.167.197.1
+ip dhcp excluded-address 10.167.196.129
+ip dhcp excluded-address 10.167.201.129
+ip dhcp excluded-address 10.167.201.65
+!
+ip dhcp pool Piso0_B
+ network 10.167.198.0 255.255.255.192
+ default-router 10.167.198.1
+ dns-server 10.167.202.35
+ domain-name building-b.rcomp-19-20-di-g2
+ip dhcp pool Piso1_B
+ network 10.167.197.0 255.255.255.128
+ default-router 10.167.197.1
+ dns-server 10.167.202.35
+ domain-name building-b.rcomp-19-20-di-g2
+ip dhcp pool Wifi_B
+ network 10.167.196.128 255.255.255.128
+ default-router 10.167.196.129
+ dns-server 10.167.202.35
+ domain-name building-b.rcomp-19-20-di-g2
+ip dhcp pool VOIP_B
+ network 10.167.201.128 255.255.255.192
+ default-router 10.167.201.129
+ option 150 ip 10.167.201.129
+ip dhcp pool VOIP_E
+ network 10.167.201.64 255.255.255.192
+ default-router 10.167.201.65
+ option 150 ip 10.167.201.65
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.1
+ encapsulation dot1Q 466
+ ip address 10.167.198.1 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.2
+ encapsulation dot1Q 467
+ ip address 10.167.197.1 255.255.255.128
+ ip nat inside
+!
+interface FastEthernet0/0.3
+ encapsulation dot1Q 468
+ ip address 10.167.198.129 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.4
+ encapsulation dot1Q 469
+ ip address 10.167.202.33 255.255.255.240
+ ip nat inside
+!
+interface FastEthernet0/0.5
+ encapsulation dot1Q 470
+ ip address 10.167.202.129 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.6
+ encapsulation dot1Q 486
+ ip address 10.167.196.2 255.255.255.128
+ ip nat outside
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 2
+ log-adjacency-changes
+ network 10.167.198.0 0.0.0.63 area 2
+ network 10.167.197.0 0.0.0.127 area 2
+ network 10.167.196.128 0.0.0.127 area 2
+ network 10.167.202.32 0.0.0.15 area 2
+ network 10.167.201.128 0.0.0.63 area 2
+ network 10.167.196.0 0.0.0.255 area 0
+!
+ip nat inside source list 1 interface FastEthernet0/0.1 overload
+ip nat inside source list 2 interface FastEthernet0/0.2 overload
+ip nat inside source list 3 interface FastEthernet0/0.3 overload
+ip nat inside source list 4 interface FastEthernet0/0.4 overload
+ip nat inside source list 5 interface FastEthernet0/0.5 overload
+ip nat inside source static tcp 10.167.202.34 80 10.167.196.2 80 
+ip nat inside source static tcp 10.167.202.34 443 10.167.196.2 443 
+ip nat inside source static tcp 10.167.202.35 53 10.167.196.2 53 
+ip classless
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 10.167.202.32 0.0.0.15
+access-list 2 permit 10.167.202.32 0.0.0.15
+access-list 3 permit 10.167.202.32 0.0.0.15
+access-list 4 permit 10.167.202.32 0.0.0.15
+access-list 5 permit 10.167.202.32 0.0.0.15
+!
+!
+!
+!
+!
+!
+telephony-service
+ max-ephones 5
+ max-dn 5
+ ip source-address 10.167.201.129 port 2000
+ auto assign 1 to 5
+!
+ephone-dn 1
+ number 2000
+!
+ephone-dn 2
+ number 2001
+!
+ephone-dn 3
+ number 2002
+!
+ephone-dn 4
+ number 2003
+!
+ephone-dn 5
+ number 2004
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+

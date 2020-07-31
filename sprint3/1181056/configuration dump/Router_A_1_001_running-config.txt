@@ -1,0 +1,172 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+ip dhcp excluded-address 10.167.200.1
+ip dhcp excluded-address 10.167.200.65
+ip dhcp excluded-address 10.167.201.225
+ip dhcp excluded-address 10.167.202.1
+!
+ip dhcp pool Piso0_A
+ network 10.167.200.0 255.255.255.192
+ default-router 10.167.200.1
+ dns-server 10.167.197.130
+ domain-name rcomp-19-20-di-g2
+ip dhcp pool Piso1_A
+ network 10.167.200.64 255.255.255.192
+ default-router 10.167.200.65
+ dns-server 10.167.197.130
+ domain-name rcomp-19-20-di-g2
+ip dhcp pool Wifi_A
+ network 10.167.201.224 255.255.255.224
+ default-router 10.167.201.225
+ dns-server 10.167.197.130
+ domain-name rcomp-19-20-di-g2
+ip dhcp pool VOIP_A
+ network 10.167.202.0 255.255.255.224
+ default-router 10.167.202.1
+ option 150 ip 10.167.202.1
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.1
+ encapsulation dot1Q 461
+ ip address 10.167.200.1 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.2
+ encapsulation dot1Q 462
+ ip address 10.167.200.65 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.3
+ encapsulation dot1Q 463
+ ip address 10.167.201.225 255.255.255.224
+ ip nat inside
+!
+interface FastEthernet0/0.4
+ encapsulation dot1Q 464
+ ip address 10.167.197.129 255.255.255.128
+ ip nat inside
+!
+interface FastEthernet0/0.5
+ encapsulation dot1Q 465
+ ip address 10.167.202.1 255.255.255.224
+ ip nat inside
+!
+interface FastEthernet0/0.6
+ encapsulation dot1Q 486
+ ip address 10.167.196.1 255.255.255.128
+ ip nat outside
+!
+interface FastEthernet0/1
+ ip address 17.10.7.134 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router rip
+!
+ip nat inside source list 1 interface FastEthernet0/0.1 overload
+ip nat inside source list 2 interface FastEthernet0/0.2 overload
+ip nat inside source list 3 interface FastEthernet0/0.3 overload
+ip nat inside source list 4 interface FastEthernet0/0.4 overload
+ip nat inside source list 5 interface FastEthernet0/0.5 overload
+ip nat inside source static tcp 10.167.187.131 80 10.167.196.1 80 
+ip nat inside source static tcp 10.167.197.131 443 10.167.196.1 443 
+ip nat inside source static tcp 10.167.197.130 53 10.167.196.1 53 
+ip nat inside source static tcp 10.167.197.131 80 10.167.196.1 80 
+ip classless
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 10.167.197.0 0.0.0.255
+access-list 2 permit 10.167.197.0 0.0.0.255
+access-list 3 permit 10.167.197.0 0.0.0.255
+access-list 4 permit 10.167.197.0 0.0.0.255
+access-list 5 permit 10.167.187.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+telephony-service
+ max-ephones 3
+ max-dn 3
+ ip source-address 10.167.202.1 port 2000
+ auto assign 1 to 3
+!
+ephone-dn 1
+ number 1000
+!
+ephone-dn 2
+ number 1001
+!
+ephone-dn 3
+!
+ephone 1
+ device-security-mode none
+ mac-address 00D0.976E.B772
+ type 7960
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 000A.F302.4B8E
+ type 7960
+ button 1:2
+!
+ephone 3
+ device-security-mode none
+ mac-address 0002.16DB.3C23
+ button 1:3
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
